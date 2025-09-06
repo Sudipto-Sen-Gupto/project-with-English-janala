@@ -3,10 +3,21 @@ const api=()=>{
     const url="https://openapi.programming-hero.com/api/levels/all";
     fetch(url).then(res=>res.json()).then(json=>parent(json.data));
 }
- 
+ const rmvDesign=()=>{
+   const rmv= document.querySelectorAll(".click");
+        rmv.forEach(x=>{
+            x.classList.remove("active");
+        })
+ }
 const repo=(id)=>{
     const url=`https://openapi.programming-hero.com/api/level/${id}`;
-    fetch(url).then(res=>res.json()).then(json=>gouri(json.data))
+    fetch(url).then(res=>res.json()).then(json=>{
+          rmvDesign();
+        const btn=document.getElementById(`lesson-${id}`);
+        btn.classList.add("active")
+        // console.log(btn);
+        
+        gouri(json.data)})
 }
 
 const gouri=(item)=>{
@@ -30,7 +41,7 @@ const gouri=(item)=>{
             <p class="my-3">Meaning/Pronounciation</p>
             <h1 class="font-bold text-2xl">"${element.meaning?element.meaning:"মানে পাওয়া যায় নি"}/${element.pronunciation}"</h1>
             <div class="my-5 flex justify-between">
-              <button class="btn"><i class="fa-solid fa-circle-exclamation"></i></button>
+              <button class="btn" onclick="wordDetail(${element.id})"><i class="fa-solid fa-circle-exclamation"></i></button>
               <button class="btn"><i class="fa-solid fa-volume-high"></i></button>
             </div>
             
@@ -46,11 +57,28 @@ const parent=(item)=>{
     item.map(x=>{
         console.log(x);
         const newBtn=document.createElement("div");
-        newBtn.innerHTML=`<button onclick="repo(${x.level_no})" class="btn btn-outline btn-primary"><i class="fa-solid fa-book-open"></i>Lesson-${x.level_no}</button>`
+        newBtn.innerHTML=`<button id="lesson-${x.level_no}" onclick="repo(${x.level_no})" class="click btn btn-outline btn-primary"><i class="fa-solid fa-book-open"></i>Lesson-${x.level_no}</button>`
         buttonContainer.append(newBtn);
 
     })
     
 }
 
+const wordDetail=async(id)=>{
+  const url=`https://openapi.programming-hero.com/api/word/${id}`;
+  const res=await fetch(url);
+  const data=await res.json();
+  modal(data.data)
+}
+
+const modal=(mode)=>{
+  document.getElementById("my_modal").showModal();
+  const divi=document.getElementById("rongo_koro");
+
+  divi.innerHTML=`
+  <h1>${mode.word} (🎙${mode.pronunciation})<h1>
+  <h1>Meaning </br> ${mode.meaning?`${mode.meaning}`:"No word found"}<h1>
+  <h1>Example </br> ${mode.sentence}</h1>
+  <h1>সমার্থক শব্দ গুলো </br>${mode.synonyms} </h1> `
+}
 api();

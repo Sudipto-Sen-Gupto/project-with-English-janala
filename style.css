@@ -7,3 +7,7 @@
   font-style: normal;
 }
 
+.active{
+  background-color: #422AD5;
+  color: white;
+}
