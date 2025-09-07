@@ -10,6 +10,7 @@ const api=()=>{
         })
  }
 const repo=(id)=>{
+   spin(true)
     const url=`https://openapi.programming-hero.com/api/level/${id}`;
     fetch(url).then(res=>res.json()).then(json=>{
           rmvDesign();
@@ -20,8 +21,19 @@ const repo=(id)=>{
         gouri(json.data)})
 }
 
+const spin=(el)=>{
+  
+  if(el===true){
+     document.getElementById("spinner").classList.remove("hidden");
+     document.getElementById("sec2").classList.add("hidden");
+  }
+  else{
+     document.getElementById("spinner").classList.add("hidden");
+     document.getElementById("sec2").classList.remove("hidden");
+  }
+}
 const gouri=(item)=>{
-      
+     
     // console.log(item);
     const sel=document.getElementById("sec2");
       sel.innerHTML="";
@@ -48,6 +60,7 @@ const gouri=(item)=>{
           </div>`
         sel.append(newChild);
     });
+    spin(false);
 };
 
 const parent=(item)=>{
