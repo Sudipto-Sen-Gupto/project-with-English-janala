@@ -95,3 +95,19 @@ const modal=(mode)=>{
   <h1>সমার্থক শব্দ গুলো </br>${mode.synonyms} </h1> `
 }
 api();
+
+document.getElementById("btn").addEventListener("click",(e)=>{
+  e.preventDefault();
+
+  const input=document.getElementById("search");
+   const searchValue=input.value.replaceAll(" ","").toLowerCase();
+   console.log(searchValue);
+   
+   const url="https://openapi.programming-hero.com/api/words/all"
+   fetch(url).then(res=>res.json()).then(json=>{
+     const word=json.data;
+     const filterWord=word.filter(x=>x.word.includes(searchValue))
+     console.log(filterWord);
+     gouri(filterWord)
+   })
+})
